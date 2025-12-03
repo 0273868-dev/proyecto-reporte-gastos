@@ -207,6 +207,20 @@ def pagina_reportes():
             mime="application/pdf",
         )
 
+       st.markdown("---")
+    st.subheader("⚠️ Herramientas de Administración")
+
+    if st.button("🧹 Vaciar todas las facturas"):
+        try:
+            conn = db._get_conn()
+            cur = conn.cursor()
+            cur.execute("DELETE FROM facturas")
+            conn.commit()
+            conn.close()
+            st.success("Todas las facturas fueron eliminadas correctamente.")
+        except Exception as e:
+            st.error(f"Ocurrió un error: {e}")
+
 
 def main():
     st.sidebar.title("Navegación")
