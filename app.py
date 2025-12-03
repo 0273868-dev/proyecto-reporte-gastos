@@ -84,9 +84,12 @@ def pagina_cargar_facturas():
                     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
                         tmp.write(archivo.read())
                         tmp_path = tmp.name
+
                     parser = PDFParser(tmp_path)
                     res = parser.parse()
+
                     os.remove(tmp_path)
+
                     if not res.get("success"):
                         resultados.append(
                             {
@@ -97,6 +100,7 @@ def pagina_cargar_facturas():
                             }
                         )
                         continue
+
                     factura = res["factura"]
                     ok, msg = db.insertar_factura(factura)
                     resultados.append(
@@ -107,10 +111,12 @@ def pagina_cargar_facturas():
                             "mensaje": msg,
                         }
                     )
+
                 except Exception as e:
                     resultados.append(
                         {"archivo": nombre, "tipo": "PDF", "status": "Error", "mensaje": str(e)}
                     )
+
             else:
                 resultados.append(
                     {
@@ -207,7 +213,7 @@ def pagina_reportes():
             mime="application/pdf",
         )
 
-       st.markdown("---")
+    st.markdown("---")
     st.subheader("⚠️ Herramientas de Administración")
 
     if st.button("🧹 Vaciar todas las facturas"):
